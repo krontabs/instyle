@@ -3,30 +3,19 @@
 import { useRef } from "react";
 import Image from "next/image";
 import { useGSAP, sectionReveal } from "@/lib/gsap";
-
-const points = [
-  {
-    title: "Consultation first",
-    body: "We listen before we lift a pair of scissors.",
-  },
-  {
-    title: "Quality products",
-    body: "Professional color lines and treatment systems we trust on our own hair.",
-  },
-  {
-    title: "Seven days a week",
-    body: "Open daily 10:30–7, because good hair days shouldn't wait for one.",
-  },
-];
+import { useLang } from "@/lib/i18n";
+import { translations } from "@/lib/translations";
 
 export default function Experience() {
   const ref = useRef<HTMLElement>(null);
+  const { lang } = useLang();
+  const t = translations[lang].experience;
 
   useGSAP(
     () => {
       if (ref.current) sectionReveal(ref.current, ".anim");
     },
-    { scope: ref }
+    { scope: ref, dependencies: [lang], revertOnUpdate: true }
   );
 
   return (
@@ -45,19 +34,16 @@ export default function Experience() {
 
         <div>
           <p className="anim mb-4 text-[11px] tracking-[0.32em] text-gold-deep uppercase">
-            The experience
+            {t.eyebrow}
           </p>
           <h2 className="anim font-display text-3xl leading-tight text-ink md:text-4xl">
-            A salon that looks the way you want to feel
+            {t.h2}
           </h2>
           <p className="anim mt-5 max-w-lg text-base font-light leading-relaxed text-stone">
-            Marble walls, gold-arched mirrors and a few famous art toys keep
-            you company while you transform. But the real luxury is the
-            attention: unhurried consultations, meticulous sectioning, and
-            stylists who remember how you like your fringe.
+            {t.body}
           </p>
           <ul className="mt-9 space-y-6">
-            {points.map((p) => (
+            {t.points.map((p) => (
               <li key={p.title} className="anim flex gap-5">
                 <span className="mt-1 h-px w-9 shrink-0 bg-gold" aria-hidden />
                 <div>

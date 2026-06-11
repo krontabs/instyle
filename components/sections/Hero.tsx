@@ -1,11 +1,20 @@
 "use client";
 
-import { useRef } from "react";
+import { useEffect, useRef } from "react";
 import { gsap, useGSAP, SplitText, EASE } from "@/lib/gsap";
+import { useLang } from "@/lib/i18n";
+import { translations } from "@/lib/translations";
 
 export default function Hero() {
   const ref = useRef<HTMLElement>(null);
   const videoRef = useRef<HTMLVideoElement>(null);
+  const { lang } = useLang();
+  const t = translations[lang].hero;
+
+  useEffect(() => {
+    const v = videoRef.current;
+    if (v && v.readyState >= 2) v.style.opacity = "1";
+  }, []);
 
   useGSAP(
     () => {
@@ -39,7 +48,7 @@ export default function Hero() {
         videoRef.current?.pause();
       });
     },
-    { scope: ref }
+    { scope: ref, dependencies: [lang], revertOnUpdate: true }
   );
 
   return (
@@ -67,6 +76,7 @@ export default function Hero() {
         className="absolute inset-0 bg-gradient-to-r from-ivory/85 via-ivory/55 to-ivory/10"
         aria-hidden
       />
+      <div className="absolute inset-0 bg-ivory/25 md:hidden" aria-hidden />
       <div
         className="absolute inset-x-0 top-0 h-36 bg-gradient-to-b from-ivory/60 to-transparent"
         aria-hidden
@@ -79,33 +89,34 @@ export default function Hero() {
       <div className="relative mx-auto w-full max-w-6xl px-5 pb-20 pt-32 md:px-8 md:pt-36">
         <div className="max-w-xl">
           <p className="anim hero-fade mb-5 text-[11px] font-normal tracking-[0.32em] text-gold-deep uppercase">
-            Seasons Place · City of Industry
+            {t.eyebrow}
           </p>
-          <h1 className="anim hero-h1 font-display text-[2.6rem] leading-[1.08] text-ink md:text-[clamp(2.4rem,4.4vw,3.9rem)]">
-            Leave looking like the best version of you.
+          <h1
+            key={lang}
+            className="anim hero-h1 font-display text-[2.6rem] leading-[1.14] text-ink md:text-[clamp(2.4rem,4.4vw,3.9rem)]"
+          >
+            {t.h1}
           </h1>
           <p className="anim hero-fade mt-6 max-w-md text-base font-normal leading-relaxed text-ink/75 md:text-lg">
-            Precision cuts, dimensional color and silk-finish treatments in a
-            marble-and-gold studio — open every day, 10:30 to 7.
+            {t.sub}
           </p>
           <div className="anim hero-fade mt-9 flex flex-wrap items-center gap-5">
             <a
               href="#book"
               className="whitespace-nowrap bg-ink px-8 py-4 text-[12px] tracking-[0.24em] text-ivory uppercase transition-transform duration-200 hover:scale-[1.04] hover:bg-gold-deep"
             >
-              Reserve your chair
+              {t.cta}
             </a>
             <a
               href="#services"
               className="group relative text-[13px] tracking-[0.2em] text-ink uppercase"
             >
-              View services
+              {t.ctaSecondary}
               <span className="absolute -bottom-1.5 left-0 h-px w-full bg-gold transition-all duration-300 group-hover:h-[2px]" />
             </a>
           </div>
           <p className="anim hero-fade mt-12 text-[12px] font-normal tracking-[0.14em] text-ink/65">
-            Open 7 days &nbsp;·&nbsp; Walk-ins welcome, appointments first
-            &nbsp;·&nbsp; Inside Seasons Place
+            {t.trust}
           </p>
         </div>
       </div>

@@ -18,8 +18,8 @@
   --color-gold: var(--gold);
   --color-gold-deep: var(--gold-deep);
   --color-ink: var(--ink);
-  --font-display: var(--font-marcellus);
-  --font-body: var(--font-jost);
+  --font-display: var(--font-marcellus), var(--font-noto-serif-sc), serif;
+  --font-body: var(--font-jost), var(--font-noto-sans-sc), sans-serif;
 }
 
 html {
@@ -35,7 +35,7 @@ html {
 body {
   background: var(--ivory);
   color: var(--ink);
-  font-family: var(--font-jost), sans-serif;
+  font-family: var(--font-jost), var(--font-noto-sans-sc), sans-serif;
 }
 
 ::selection {

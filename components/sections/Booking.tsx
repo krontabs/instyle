@@ -6,9 +6,10 @@ import {
   bookingServices,
   bookingTimes,
   stylists,
-  site,
   PREFILL_EVENT,
 } from "@/lib/site";
+import { useLang } from "@/lib/i18n";
+import { translations } from "@/lib/translations";
 
 type Status = "idle" | "sending" | "success" | "error";
 
@@ -23,6 +24,8 @@ export default function Booking() {
   const [errorMsg, setErrorMsg] = useState("");
   const [today, setToday] = useState<string>();
   const [service, setService] = useState("");
+  const { lang } = useLang();
+  const t = translations[lang].booking;
 
   useEffect(() => {
     const d = new Date();
@@ -44,7 +47,7 @@ export default function Booking() {
     () => {
       if (ref.current) sectionReveal(ref.current, ".anim", { stagger: 0.06 });
     },
-    { scope: ref }
+    { scope: ref, dependencies: [lang], revertOnUpdate: true }
   );
 
   async function handleSubmit(e: FormEvent<HTMLFormElement>) {
@@ -68,16 +71,11 @@ export default function Booking() {
         form.reset();
       } else {
         setStatus("error");
-        setErrorMsg(
-          json.error ??
-            `Something went wrong sending your request. Please try again, or email us at ${site.email}.`
-        );
+        setErrorMsg(json.error && lang === "en" ? json.error : t.error);
       }
     } catch {
       setStatus("error");
-      setErrorMsg(
-        `Something went wrong sending your request. Please try again, or email us at ${site.email}.`
-      );
+      setErrorMsg(t.error);
     }
   }
 
@@ -85,14 +83,13 @@ export default function Booking() {
     <section ref={ref} id="book" className="bg-ink py-20 md:py-28">
       <div className="mx-auto max-w-3xl px-5 md:px-8">
         <p className="anim mb-4 text-center text-[11px] tracking-[0.32em] text-gold uppercase">
-          Reservations
+          {t.eyebrow}
         </p>
         <h2 className="anim font-display text-center text-3xl leading-tight text-ivory md:text-4xl">
-          Book your appointment
+          {t.h2}
         </h2>
         <p className="anim mx-auto mt-4 max-w-lg text-center text-sm font-light leading-relaxed text-ivory/70">
-          Tell us what you&apos;d like and when works for you — we&apos;ll
-          confirm by email or text, usually within a few hours.
+          {t.sub}
         </p>
 
         {status === "success" ? (
@@ -115,18 +112,17 @@ export default function Booking() {
               </svg>
             </span>
             <p className="font-display mt-5 text-2xl text-ivory">
-              Request received
+              {t.successTitle}
             </p>
             <p className="mx-auto mt-3 max-w-md text-sm font-light leading-relaxed text-ivory/70">
-              Keep an eye on your phone or inbox — we usually reply within a
-              few hours during opening times.
+              {t.successSub}
             </p>
             <button
               type="button"
               onClick={() => setStatus("idle")}
               className="mt-7 text-[12px] tracking-[0.2em] text-gold uppercase underline-offset-4 hover:underline"
             >
-              Make another request
+              {t.another}
             </button>
           </div>
         ) : (
@@ -136,7 +132,7 @@ export default function Booking() {
           >
             <div>
               <label htmlFor="bk-name" className={labelClass}>
-                Your name <span className="text-gold-deep">*</span>
+                {t.name} <span className="text-gold-deep">*</span>
               </label>
               <input
                 id="bk-name"
@@ -145,13 +141,13 @@ export default function Booking() {
                 required
                 maxLength={120}
                 autoComplete="name"
-                placeholder="Jane Lee"
+                placeholder={t.namePlaceholder}
                 className={inputClass}
               />
             </div>
             <div>
               <label htmlFor="bk-contact" className={labelClass}>
-                Phone or email <span className="text-gold-deep">*</span>
+                {t.contact} <span className="text-gold-deep">*</span>
               </label>
               <input
                 id="bk-contact"
@@ -160,13 +156,13 @@ export default function Booking() {
                 required
                 maxLength={160}
                 autoComplete="email"
-                placeholder="However you'd like us to confirm"
+                placeholder={t.contactPlaceholder}
                 className={inputClass}
               />
             </div>
             <div>
               <label htmlFor="bk-service" className={labelClass}>
-                Service <span className="text-gold-deep">*</span>
+                {t.service} <span className="text-gold-deep">*</span>
               </label>
               <select
                 id="bk-service"
@@ -177,18 +173,18 @@ export default function Booking() {
                 className={inputClass}
               >
                 <option value="" disabled>
-                  Choose a service
+                  {t.chooseService}
                 </option>
                 {bookingServices.map((s) => (
                   <option key={s} value={s}>
-                    {s}
+                    {t.serviceOptions[s] ?? s}
                   </option>
                 ))}
               </select>
             </div>
             <div>
               <label htmlFor="bk-stylist" className={labelClass}>
-                Preferred stylist
+                {t.stylist}
               </label>
               <select
                 id="bk-stylist"
@@ -198,14 +194,14 @@ export default function Booking() {
               >
                 {stylists.map((s) => (
                   <option key={s} value={s}>
-                    {s}
+                    {s === "No preference" ? t.noPreference : s}
                   </option>
                 ))}
               </select>
             </div>
             <div>
               <label htmlFor="bk-date" className={labelClass}>
-                Preferred date <span className="text-gold-deep">*</span>
+                {t.date} <span className="text-gold-deep">*</span>
               </label>
               <input
                 id="bk-date"
@@ -218,7 +214,7 @@ export default function Booking() {
             </div>
             <div>
               <label htmlFor="bk-time" className={labelClass}>
-                Preferred time <span className="text-gold-deep">*</span>
+                {t.time} <span className="text-gold-deep">*</span>
               </label>
               <select
                 id="bk-time"
@@ -228,25 +224,25 @@ export default function Booking() {
                 className={inputClass}
               >
                 <option value="" disabled>
-                  Choose a time
+                  {t.chooseTime}
                 </option>
-                {bookingTimes.map((t) => (
-                  <option key={t} value={t}>
-                    {t}
+                {bookingTimes.map((tm) => (
+                  <option key={tm} value={tm}>
+                    {t.timeOptions[tm] ?? tm}
                   </option>
                 ))}
               </select>
             </div>
             <div className="sm:col-span-2">
               <label htmlFor="bk-notes" className={labelClass}>
-                Notes
+                {t.notes}
               </label>
               <textarea
                 id="bk-notes"
                 name="notes"
                 rows={3}
                 maxLength={2000}
-                placeholder="Anything we should know — hair length, inspo photos coming, first visit…"
+                placeholder={t.notesPlaceholder}
                 className={inputClass}
               />
             </div>
@@ -277,11 +273,10 @@ export default function Booking() {
                 disabled={status === "sending"}
                 className="w-full bg-ink px-8 py-4 text-[12px] tracking-[0.24em] text-ivory uppercase transition-all duration-200 hover:scale-[1.01] hover:bg-gold-deep disabled:cursor-not-allowed disabled:opacity-60 sm:w-auto"
               >
-                {status === "sending" ? "Sending…" : "Request appointment"}
+                {status === "sending" ? t.sending : t.submit}
               </button>
               <p className="mt-4 text-[12px] font-light text-stone">
-                No payment, no commitment — this is just a request. We confirm
-                every appointment personally before it's set.
+                {t.reassurance}
               </p>
             </div>
           </form>

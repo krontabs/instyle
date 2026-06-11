@@ -2,73 +2,52 @@
 
 import { useRef } from "react";
 import { useGSAP, sectionReveal } from "@/lib/gsap";
+import { useLang } from "@/lib/i18n";
+import { translations } from "@/lib/translations";
 
-const team = [
-  {
-    name: "Jade",
-    role: "Color specialist",
-    bio: "Known for icy blondes and seamless balayage — the colorist behind many of the transformations on our wall.",
-    initial: "JA",
-  },
-  {
-    name: "John",
-    role: "Senior stylist",
-    bio: "Precision scissor work and clean, modern shapes — the cut that still falls into place weeks later.",
-    initial: "JO",
-  },
-  {
-    name: "Ryan",
-    role: "Stylist",
-    bio: "Sharp fades, textured crops and effortless everyday styling for him and her.",
-    initial: "RY",
-  },
-  {
-    name: "Anckley",
-    role: "Stylist",
-    bio: "Soft perms, silky treatments and blowouts that hold — hair that moves the way you want it to.",
-    initial: "AN",
-  },
-];
+const initials = ["JA", "JO", "RY", "AN"];
 
 export default function Stylists() {
   const ref = useRef<HTMLElement>(null);
+  const { lang } = useLang();
+  const t = translations[lang].stylists;
 
   useGSAP(
     () => {
       if (ref.current) sectionReveal(ref.current, ".anim");
     },
-    { scope: ref }
+    { scope: ref, dependencies: [lang], revertOnUpdate: true }
   );
 
   return (
     <section ref={ref} id="stylists" className="bg-ivory py-20 md:py-28">
       <div className="mx-auto max-w-6xl px-5 md:px-8">
         <p className="anim mb-4 text-[11px] tracking-[0.32em] text-gold-deep uppercase">
-          Stylists
+          {t.eyebrow}
         </p>
         <h2 className="anim font-display max-w-lg text-3xl leading-tight text-ink md:text-4xl">
-          The artists behind the chair
+          {t.h2}
         </h2>
 
         <div className="mt-12 grid grid-cols-1 gap-7 sm:grid-cols-2">
-          {team.map((t) => (
+          {t.team.map((m, i) => (
             <article
-              key={t.name}
+              key={m.name}
               className="anim flex gap-6 border border-marble bg-ivory-deep p-7 transition-all duration-300 hover:-translate-y-1.5 hover:shadow-[0_18px_40px_-18px_rgba(30,28,24,0.25)]"
             >
               <div
                 className="arch flex h-20 w-16 shrink-0 items-end justify-center border-2 border-gold bg-marble pb-2 font-display text-xl text-gold-deep"
                 aria-hidden
               >
-                {t.initial}
+                {initials[i]}
               </div>
               <div>
-                <h3 className="font-display text-xl text-ink">{t.name}</h3>
+                <h3 className="font-display text-xl text-ink">{m.name}</h3>
                 <p className="text-[12px] tracking-[0.2em] text-gold-deep uppercase">
-                  {t.role}
+                  {m.role}
                 </p>
                 <p className="mt-3 text-sm font-light leading-relaxed text-stone">
-                  {t.bio}
+                  {m.bio}
                 </p>
               </div>
             </article>

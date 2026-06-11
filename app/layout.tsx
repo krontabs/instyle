@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
-import { Marcellus, Jost } from "next/font/google";
+import { Marcellus, Jost, Noto_Serif_SC, Noto_Sans_SC } from "next/font/google";
+import { LanguageProvider } from "@/lib/i18n";
 import "./globals.css";
 
 const marcellus = Marcellus({
@@ -14,6 +15,20 @@ const jost = Jost({
   weight: ["300", "400", "500"],
   subsets: ["latin"],
   display: "swap",
+});
+
+const notoSerifSC = Noto_Serif_SC({
+  variable: "--font-noto-serif-sc",
+  weight: "500",
+  display: "swap",
+  preload: false,
+});
+
+const notoSansSC = Noto_Sans_SC({
+  variable: "--font-noto-sans-sc",
+  weight: ["300", "400", "500"],
+  display: "swap",
+  preload: false,
 });
 
 export const metadata: Metadata = {
@@ -37,7 +52,7 @@ const businessSchema = {
   "@type": "HairSalon",
   name: "InStyle Hair Salon",
   image: "/images/salon-mirrors.jpg",
-  email: "stanlin0410@gmail.com",
+  email: "admin@krontabs.com",
   address: {
     "@type": "PostalAddress",
     streetAddress: "18558 Gale Ave #180",
@@ -70,14 +85,14 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${marcellus.variable} ${jost.variable} h-full antialiased`}
+      className={`${marcellus.variable} ${jost.variable} ${notoSerifSC.variable} ${notoSansSC.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(businessSchema) }}
         />
-        {children}
+        <LanguageProvider>{children}</LanguageProvider>
       </body>
     </html>
   );

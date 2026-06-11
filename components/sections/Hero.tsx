@@ -1,11 +1,11 @@
 "use client";
 
 import { useRef } from "react";
-import Image from "next/image";
 import { gsap, useGSAP, SplitText, EASE } from "@/lib/gsap";
 
 export default function Hero() {
   const ref = useRef<HTMLElement>(null);
+  const videoRef = useRef<HTMLVideoElement>(null);
 
   useGSAP(
     () => {
@@ -13,10 +13,6 @@ export default function Hero() {
 
       mm.add("(prefers-reduced-motion: no-preference)", () => {
         gsap.set(".hero-fade", { autoAlpha: 0, y: 24 });
-        gsap.set(".hero-arch-main, .hero-arch-side", {
-          visibility: "visible",
-          clipPath: "inset(100% 0% 0% 0%)",
-        });
         gsap.set(".hero-h1", { visibility: "visible" });
 
         const split = SplitText.create(".hero-h1", {
@@ -29,39 +25,18 @@ export default function Hero() {
           yPercent: 110,
           duration: 0.9,
           stagger: 0.09,
-        })
-          .to(
-            ".hero-fade",
-            { autoAlpha: 1, y: 0, duration: 0.7, stagger: 0.1 },
-            "-=0.45"
-          )
-          .to(
-            ".hero-arch-main",
-            { clipPath: "inset(0% 0% 0% 0%)", duration: 1.0, ease: "expo.out" },
-            0.35
-          )
-          .to(
-            ".hero-arch-side",
-            { clipPath: "inset(0% 0% 0% 0%)", duration: 1.0, ease: "expo.out" },
-            0.55
-          );
-
-        gsap.to(".hero-arch-main", {
-          y: -28,
-          ease: "none",
-          scrollTrigger: { trigger: ref.current, start: "top top", end: "bottom top", scrub: true },
-        });
-        gsap.to(".hero-arch-side", {
-          y: 22,
-          ease: "none",
-          scrollTrigger: { trigger: ref.current, start: "top top", end: "bottom top", scrub: true },
-        });
+        }).to(
+          ".hero-fade",
+          { autoAlpha: 1, y: 0, duration: 0.7, stagger: 0.1 },
+          "-=0.45"
+        );
 
         return () => split.revert();
       });
 
       mm.add("(prefers-reduced-motion: reduce)", () => {
-        gsap.set(".anim", { visibility: "visible", clearProps: "clipPath" });
+        gsap.set(".anim", { visibility: "visible" });
+        videoRef.current?.pause();
       });
     },
     { scope: ref }
@@ -71,17 +46,43 @@ export default function Hero() {
     <section
       ref={ref}
       id="top"
-      className="relative overflow-hidden bg-ivory pt-28 md:pt-36"
+      className="relative flex min-h-[92svh] items-center overflow-hidden bg-ivory"
     >
-      <div className="mx-auto grid max-w-6xl grid-cols-1 items-center gap-12 px-5 pb-16 md:grid-cols-[1.15fr_0.85fr] md:px-8 md:pb-24">
-        <div>
+      <video
+        ref={videoRef}
+        className="absolute inset-0 h-full w-full object-cover"
+        src="/videos/salon-hero.mp4"
+        poster="/images/salon-mirrors.jpg"
+        autoPlay
+        muted
+        loop
+        playsInline
+        preload="metadata"
+        disablePictureInPicture
+        aria-hidden
+      />
+      <div
+        className="absolute inset-0 bg-gradient-to-r from-ivory via-ivory/80 to-ivory/20"
+        aria-hidden
+      />
+      <div
+        className="absolute inset-x-0 top-0 h-36 bg-gradient-to-b from-ivory/85 to-transparent"
+        aria-hidden
+      />
+      <div
+        className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-ivory/80 to-transparent"
+        aria-hidden
+      />
+
+      <div className="relative mx-auto w-full max-w-6xl px-5 pb-20 pt-32 md:px-8 md:pt-36">
+        <div className="max-w-xl">
           <p className="anim hero-fade mb-5 text-[11px] font-normal tracking-[0.32em] text-gold-deep uppercase">
             Seasons Place · City of Industry
           </p>
           <h1 className="anim hero-h1 font-display text-[2.6rem] leading-[1.08] text-ink md:text-[clamp(2.4rem,4.4vw,3.9rem)]">
             Leave looking like the best version of you.
           </h1>
-          <p className="anim hero-fade mt-6 max-w-md text-base font-light leading-relaxed text-stone md:text-lg">
+          <p className="anim hero-fade mt-6 max-w-md text-base font-normal leading-relaxed text-ink/75 md:text-lg">
             Precision cuts, dimensional color and silk-finish treatments in a
             marble-and-gold studio — open every day, 10:30 to 7.
           </p>
@@ -100,37 +101,14 @@ export default function Hero() {
               <span className="absolute -bottom-1.5 left-0 h-px w-full bg-gold transition-all duration-300 group-hover:h-[2px]" />
             </a>
           </div>
-          <p className="anim hero-fade mt-12 text-[12px] font-light tracking-[0.14em] text-stone">
+          <p className="anim hero-fade mt-12 text-[12px] font-normal tracking-[0.14em] text-ink/65">
             Open 7 days &nbsp;·&nbsp; Walk-ins welcome, appointments first
             &nbsp;·&nbsp; Inside Seasons Place
           </p>
         </div>
-
-        <div className="relative flex justify-center gap-5 md:justify-end">
-          <div className="anim hero-arch-main arch relative h-[340px] w-[230px] overflow-hidden border-2 border-gold md:h-[440px] md:w-[290px]">
-            <Image
-              src="/images/salon-mirrors.jpg"
-              alt="Gold arched mirrors and marble walls inside InStyle Hair Salon"
-              fill
-              sizes="(max-width: 768px) 230px, 290px"
-              className="object-cover"
-              loading="eager"
-              preload
-            />
-          </div>
-          <div className="anim hero-arch-side arch relative mt-16 hidden h-[330px] w-[210px] overflow-hidden border-2 border-gold lg:block">
-            <Image
-              src="/images/result-blonde-bob.jpg"
-              alt="Platinum blonde bob styled at InStyle, in front of the gold salon logo"
-              fill
-              sizes="210px"
-              className="object-cover"
-              loading="eager"
-            />
-          </div>
-        </div>
       </div>
-      <div className="h-px w-full bg-gradient-to-r from-transparent via-gold/50 to-transparent" />
+
+      <div className="absolute inset-x-0 bottom-0 h-px bg-gradient-to-r from-transparent via-gold/50 to-transparent" />
     </section>
   );
 }

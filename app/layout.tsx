@@ -58,7 +58,6 @@ const businessSchema = {
   "@type": "HairSalon",
   name: "InStyle Hair Salon",
   image: "/images/salon-mirrors.jpg",
-  email: "admin@krontabs.com",
   address: {
     "@type": "PostalAddress",
     streetAddress: "18558 Gale Ave #180",

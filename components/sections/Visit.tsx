@@ -44,17 +44,6 @@ export default function Visit() {
               </p>
               <p className="mt-1 text-base font-light text-ink">{t.hours}</p>
             </div>
-            <div>
-              <p className="text-[12px] tracking-[0.2em] text-gold-deep uppercase">
-                {t.emailLabel}
-              </p>
-              <a
-                href={`mailto:${site.email}`}
-                className="mt-1 inline-block text-base font-light text-ink underline decoration-gold underline-offset-4 hover:text-gold-deep"
-              >
-                {site.email}
-              </a>
-            </div>
             <a
               href={site.mapsUrl}
               target="_blank"

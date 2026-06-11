@@ -4,7 +4,6 @@ export const site = {
   address: "18558 Gale Ave #180, City of Industry, CA 91748",
   plaza: "Seasons Place",
   hours: "Open every day · 10:30 AM – 7:00 PM",
-  email: "admin@krontabs.com",
   mapsUrl:
     "https://www.google.com/maps/search/?api=1&query=InStyle+Hair+Salon+18558+Gale+Ave+%23180+City+of+Industry+CA+91748",
   mapsEmbed:

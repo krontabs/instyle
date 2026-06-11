@@ -151,7 +151,7 @@ const en = {
       "Keep an eye on your phone or inbox — we usually reply within a few hours during opening times.",
     another: "Make another request",
     error:
-      "Something went wrong sending your request. Please try again, or email us at admin@krontabs.com.",
+      "Something went wrong sending your request. Please try again in a moment, or call by the salon.",
     serviceOptions: {
       "Women's cut": "Women's cut",
       "Men's cut": "Men's cut",
@@ -321,7 +321,7 @@ const zh: Translation = {
     successTitle: "已收到您的预约申请",
     successSub: "请留意手机或邮箱——营业时间内通常几小时内回复。",
     another: "再提交一个预约",
-    error: "发送失败，请重试，或直接发送邮件至 admin@krontabs.com。",
+    error: "发送失败，请稍后重试，或直接到店咨询。",
     serviceOptions: {
       "Women's cut": "女士剪发",
       "Men's cut": "男士剪发",

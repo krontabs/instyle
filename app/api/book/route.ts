@@ -23,6 +23,51 @@ function row(label: string, value: string): string {
   return `<tr><td style="padding:6px 16px 6px 0;color:#6b6557;font-size:13px;vertical-align:top;white-space:nowrap;">${label}</td><td style="padding:6px 0;color:#1e1c18;font-size:14px;">${esc(value)}</td></tr>`;
 }
 
+type Email = {
+  to: string;
+  subject: string;
+  html: string;
+  text: string;
+  replyTo?: string;
+};
+
+async function sendViaBrevo(apiKey: string, email: Email): Promise<void> {
+  const fromEmail = process.env.BOOKING_FROM_EMAIL ?? email.to;
+  const res = await fetch("https://api.brevo.com/v3/smtp/email", {
+    method: "POST",
+    headers: {
+      "api-key": apiKey,
+      "content-type": "application/json",
+      accept: "application/json",
+    },
+    body: JSON.stringify({
+      sender: { name: "InStyle Bookings", email: fromEmail },
+      to: [{ email: email.to }],
+      subject: email.subject,
+      htmlContent: email.html,
+      textContent: email.text,
+      ...(email.replyTo ? { replyTo: { email: email.replyTo } } : {}),
+    }),
+  });
+  if (!res.ok) {
+    const body = await res.text();
+    throw new Error(`Brevo ${res.status}: ${body}`);
+  }
+}
+
+async function sendViaResend(apiKey: string, email: Email): Promise<void> {
+  const resend = new Resend(apiKey);
+  const { error } = await resend.emails.send({
+    from: process.env.BOOKING_FROM ?? "InStyle Bookings <onboarding@resend.dev>",
+    to: email.to,
+    subject: email.subject,
+    html: email.html,
+    text: email.text,
+    ...(email.replyTo ? { replyTo: email.replyTo } : {}),
+  });
+  if (error) throw new Error(`Resend: ${JSON.stringify(error)}`);
+}
+
 export async function POST(request: Request) {
   let data: BookingPayload;
   try {
@@ -54,12 +99,13 @@ export async function POST(request: Request) {
     return Response.json({ ok: false, error: "Input too long." }, { status: 400 });
   }
 
-  const apiKey = process.env.RESEND_API_KEY;
   const to = process.env.BOOKING_EMAIL;
-  if (!apiKey || !to) {
-    console.error("Booking email not configured: missing RESEND_API_KEY or BOOKING_EMAIL");
+  const brevoKey = process.env.BREVO_API_KEY;
+  const resendKey = process.env.RESEND_API_KEY;
+  if (!to || (!brevoKey && !resendKey)) {
+    console.error("Booking email not configured: need BOOKING_EMAIL plus BREVO_API_KEY or RESEND_API_KEY");
     return Response.json(
-      { ok: false, error: "Booking is temporarily unavailable. Please email us instead." },
+      { ok: false, error: "Booking is temporarily unavailable. Please try again later." },
       { status: 503 }
     );
   }
@@ -86,22 +132,19 @@ export async function POST(request: Request) {
     </div>
   </div>`;
 
+  const email: Email = {
+    to,
+    subject: `New booking — ${name} · ${service} · ${date} ${time}`,
+    html,
+    text: `New booking request\n\nName: ${name}\nContact: ${contact}\nService: ${service}\nStylist: ${stylist}\nDate: ${date}\nTime: ${time}\nNotes: ${notes || "—"}`,
+    ...(isEmail ? { replyTo: contact } : {}),
+  };
+
   try {
-    const resend = new Resend(apiKey);
-    const { error } = await resend.emails.send({
-      from: "InStyle Bookings <onboarding@resend.dev>",
-      to,
-      subject: `New booking — ${name} · ${service} · ${date} ${time}`,
-      html,
-      text: `New booking request\n\nName: ${name}\nContact: ${contact}\nService: ${service}\nStylist: ${stylist}\nDate: ${date}\nTime: ${time}\nNotes: ${notes || "—"}`,
-      ...(isEmail ? { replyTo: contact } : {}),
-    });
-    if (error) {
-      console.error("Resend error:", error);
-      return Response.json(
-        { ok: false, error: "We couldn't send your request. Please try again." },
-        { status: 502 }
-      );
+    if (brevoKey) {
+      await sendViaBrevo(brevoKey, email);
+    } else {
+      await sendViaResend(resendKey!, email);
     }
   } catch (err) {
     console.error("Booking send failed:", err);

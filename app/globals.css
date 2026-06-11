@@ -44,6 +44,19 @@ h3 {
   font-weight: 500;
 }
 
+/* iOS Safari gives date inputs an intrinsic width that overflows
+   their grid cell; force them to behave like text inputs. */
+input[type="date"] {
+  -webkit-appearance: none;
+  appearance: none;
+  min-width: 0;
+  max-width: 100%;
+  min-height: 3.25rem;
+}
+input[type="date"]::-webkit-date-and-time-value {
+  text-align: left;
+}
+
 ::selection {
   background: var(--gold);
   color: var(--ivory);

@@ -71,4 +71,4 @@ export const bookingTimes = [
   "Evening (5–7)",
 ];
 
-export const stylists = ["No preference", "Jade"];
+export const stylists = ["No preference", "Jade", "John", "Ryan", "Anckley"];

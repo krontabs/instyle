@@ -8,13 +8,25 @@ const team = [
     name: "Jade",
     role: "Color specialist",
     bio: "Known for icy blondes and seamless balayage — the colorist behind many of the transformations on our wall.",
-    initial: "J",
+    initial: "JA",
   },
   {
-    name: "The InStyle team",
-    role: "Cutters & stylists",
-    bio: "A small team with big portfolios, treating every head of hair as a commission. Tell us your vibe — we'll match you.",
-    initial: "IS",
+    name: "John",
+    role: "Senior stylist",
+    bio: "Precision scissor work and clean, modern shapes — the cut that still falls into place weeks later.",
+    initial: "JO",
+  },
+  {
+    name: "Ryan",
+    role: "Stylist",
+    bio: "Sharp fades, textured crops and effortless everyday styling for him and her.",
+    initial: "RY",
+  },
+  {
+    name: "Anckley",
+    role: "Stylist",
+    bio: "Soft perms, silky treatments and blowouts that hold — hair that moves the way you want it to.",
+    initial: "AN",
   },
 ];
 

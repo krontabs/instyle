@@ -98,9 +98,13 @@ export default function Hero() {
           </p>
           <h1
             key={lang}
-            className="anim hero-h1 font-display text-[2.6rem] leading-[1.14] text-ink md:text-[clamp(2.4rem,4.4vw,3.9rem)]"
+            className="anim hero-h1 font-display text-[2.9rem] leading-[1.12] text-ink md:text-[clamp(2.7rem,4.8vw,4.3rem)]"
           >
-            {t.h1}
+            {t.h1Pre}
+            {t.h1Em && (
+              <em className="italic text-gold-deep">{t.h1Em}</em>
+            )}
+            {t.h1Post}
           </h1>
           <p className="anim hero-fade mt-6 max-w-md text-base font-normal leading-relaxed text-ink/75 md:text-lg">
             {t.sub}

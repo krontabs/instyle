@@ -12,7 +12,9 @@ const en = {
   },
   hero: {
     eyebrow: "Seasons Place · City of Industry",
-    h1: "Leave looking like the best version of you.",
+    h1Pre: "Leave looking like ",
+    h1Em: "the best version",
+    h1Post: " of you.",
     sub: "Precision cuts, dimensional color and silk-finish treatments in a marble-and-gold studio — open every day, 10:30 to 7.",
     cta: "Reserve your chair",
     ctaSecondary: "View services",
@@ -193,7 +195,9 @@ const zh: Translation = {
   },
   hero: {
     eyebrow: "四季广场 · 工业市",
-    h1: "走出门，遇见状态最好的自己。",
+    h1Pre: "走出门，遇见状态最好的自己。",
+    h1Em: "",
+    h1Post: "",
     sub: "精剪、立体染发与丝滑护理，尽在大理石与金色交织的高端沙龙——每天营业，10:30 至 7:00。",
     cta: "立即预约",
     ctaSecondary: "查看服务",

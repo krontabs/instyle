@@ -1,11 +1,17 @@
 import type { Metadata } from "next";
-import { Marcellus, Jost, Noto_Serif_SC, Noto_Sans_SC } from "next/font/google";
+import {
+  Cormorant_Garamond,
+  Jost,
+  Noto_Serif_SC,
+  Noto_Sans_SC,
+} from "next/font/google";
 import { LanguageProvider } from "@/lib/i18n";
 import "./globals.css";
 
-const marcellus = Marcellus({
-  variable: "--font-marcellus",
-  weight: "400",
+const cormorant = Cormorant_Garamond({
+  variable: "--font-cormorant",
+  weight: ["400", "500", "600"],
+  style: ["normal", "italic"],
   subsets: ["latin"],
   display: "swap",
 });
@@ -85,7 +91,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
-      className={`${marcellus.variable} ${jost.variable} ${notoSerifSC.variable} ${notoSansSC.variable} h-full antialiased`}
+      className={`${cormorant.variable} ${jost.variable} ${notoSerifSC.variable} ${notoSansSC.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
         <script

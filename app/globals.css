@@ -18,7 +18,7 @@
   --color-gold: var(--gold);
   --color-gold-deep: var(--gold-deep);
   --color-ink: var(--ink);
-  --font-display: var(--font-marcellus), var(--font-noto-serif-sc), serif;
+  --font-display: var(--font-cormorant), var(--font-noto-serif-sc), serif;
   --font-body: var(--font-jost), var(--font-noto-sans-sc), sans-serif;
 }
 
@@ -36,6 +36,12 @@ body {
   background: var(--ivory);
   color: var(--ink);
   font-family: var(--font-jost), var(--font-noto-sans-sc), sans-serif;
+}
+
+h1,
+h2,
+h3 {
+  font-weight: 500;
 }
 
 ::selection {

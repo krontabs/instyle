@@ -50,16 +50,18 @@ export default function Hero() {
     >
       <video
         ref={videoRef}
-        className="absolute inset-0 h-full w-full object-cover"
+        className="absolute inset-0 h-full w-full object-cover opacity-0 transition-opacity duration-700 ease-out"
         src="/videos/salon-hero.mp4"
-        poster="/images/salon-mirrors.jpg"
         autoPlay
         muted
         loop
         playsInline
-        preload="metadata"
+        preload="auto"
         disablePictureInPicture
         aria-hidden
+        onLoadedData={(e) => {
+          e.currentTarget.style.opacity = "1";
+        }}
       />
       <div
         className="absolute inset-0 bg-gradient-to-r from-ivory/85 via-ivory/55 to-ivory/10"

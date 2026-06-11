@@ -29,52 +29,70 @@ const workPhotos = [
   {
     src: "/images/result-blonde-bob.jpg",
     alt: "Platinum blonde precision bob, color and cut by Jade",
+    tag: { en: "Color & cut", zh: "染发与剪发" },
   },
   {
     src: "/images/work-before-after-waves.jpg",
     alt: "Before and after: shoulder-length hair transformed into long soft waves",
+    tag: { en: "Extensions & waves", zh: "接发与卷度" },
   },
   {
     src: "/images/work-silver-bob.jpg",
     alt: "Silver-lavender two-tone bob being finished in the studio",
+    tag: { en: "Fashion color", zh: "时尚色" },
   },
   {
     src: "/images/work-rose-brown-layers.jpg",
     alt: "Rose-brown layered cut with face-framing waves",
+    tag: { en: "Cut & styling", zh: "剪发与造型" },
   },
   {
     src: "/images/work-pink-lob.jpg",
     alt: "Soft pink shoulder-length cut in an InStyle robe",
+    tag: { en: "Fashion color", zh: "时尚色" },
   },
   {
     src: "/images/work-mens-cuts.jpg",
     alt: "Four men's haircut transformations — fades and textured crops",
+    tag: { en: "Men's cuts", zh: "男士剪发" },
   },
   {
     src: "/images/work-caramel-waves.jpg",
     alt: "Caramel blonde waves with curtain bangs",
+    tag: { en: "Color & waves", zh: "染发与卷度" },
   },
   {
     src: "/images/work-color-correction.jpg",
     alt: "Color correction before and after — brassy tones to smooth ash brown",
+    tag: { en: "Color correction", zh: "颜色修正" },
   },
   {
     src: "/images/work-honey-blonde.jpg",
     alt: "Long honey blonde hair, freshly colored at the salon",
+    tag: { en: "Balayage", zh: "挑染" },
   },
   {
     src: "/images/work-dark-layers.jpg",
     alt: "Dark layered mid-length cut with soft movement",
+    tag: { en: "Cut & treatment", zh: "剪发与护理" },
   },
 ];
+
+type Photo = {
+  src: string;
+  alt: string;
+  tag?: { en: string; zh: string };
+};
 
 function Strip({
   photos,
   label,
+  lang,
   reverse = false,
 }: {
-  photos: { src: string; alt: string }[];
+  photos: Photo[];
   label: string;
+  lang: "en" | "zh";
   reverse?: boolean;
 }) {
   const containerRef = useRef<HTMLDivElement>(null);
@@ -127,7 +145,7 @@ function Strip({
       {seq.map((p, i) => (
         <figure
           key={`${p.src}-${i}`}
-          className={`relative h-[320px] w-[240px] shrink-0 md:h-[400px] md:w-[300px] ${i % 2 === 1 ? "mt-6" : ""} overflow-hidden ${i % 2 === 0 ? "arch border-2 border-gold" : ""}`}
+          className={`group relative h-[320px] w-[240px] shrink-0 md:h-[400px] md:w-[300px] ${i % 2 === 1 ? "mt-6" : ""} overflow-hidden ${i % 2 === 0 ? "arch border-2 border-gold" : ""}`}
         >
           <Image
             src={p.src}
@@ -136,6 +154,13 @@ function Strip({
             sizes="(max-width: 768px) 240px, 300px"
             className="object-cover"
           />
+          {p.tag && (
+            <figcaption className="absolute inset-x-0 bottom-0 flex items-end justify-center bg-gradient-to-t from-ink/75 via-ink/30 to-transparent pb-5 pt-14 opacity-0 transition-opacity duration-300 group-hover:opacity-100">
+              <span className="text-[11px] tracking-[0.26em] text-gold uppercase">
+                {p.tag[lang]}
+              </span>
+            </figcaption>
+          )}
         </figure>
       ))}
     </div>
@@ -192,8 +217,8 @@ export default function Gallery() {
         </div>
       </div>
 
-      <Strip photos={workPhotos} label={t.workLabel} />
-      <Strip photos={spacePhotos} label={t.spaceLabel} reverse />
+      <Strip photos={workPhotos} label={t.workLabel} lang={lang} />
+      <Strip photos={spacePhotos} label={t.spaceLabel} lang={lang} reverse />
     </section>
   );
 }

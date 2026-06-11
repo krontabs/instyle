@@ -98,7 +98,7 @@ export default function Booking() {
             role="status"
           >
             <span
-              className="mx-auto flex h-12 w-12 items-center justify-center rounded-full border border-gold text-gold"
+              className="arch mx-auto flex h-16 w-14 items-end justify-center border border-gold pb-3 text-gold"
               aria-hidden
             >
               <svg width="20" height="20" viewBox="0 0 20 20" fill="none">

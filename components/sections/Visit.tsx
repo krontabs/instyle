@@ -55,7 +55,7 @@ export default function Visit() {
           </div>
         </div>
 
-        <div className="anim relative h-[320px] w-full overflow-hidden border border-marble md:h-[420px]">
+        <div className="anim arch relative mx-auto h-[400px] w-full max-w-[420px] overflow-hidden border-2 border-gold md:h-[480px]">
           <iframe
             src={site.mapsEmbed}
             title={t.mapTitle}

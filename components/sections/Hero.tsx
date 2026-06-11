@@ -112,7 +112,7 @@ export default function Hero() {
           <div className="anim hero-fade mt-9 flex flex-wrap items-center gap-5">
             <a
               href="#book"
-              className="whitespace-nowrap bg-ink px-8 py-4 text-[12px] tracking-[0.24em] text-ivory uppercase transition-transform duration-200 hover:scale-[1.04] hover:bg-gold-deep"
+              className="btn-sheen whitespace-nowrap bg-ink px-8 py-4 text-[12px] tracking-[0.24em] text-ivory uppercase transition-transform duration-200 hover:scale-[1.04] hover:bg-gold-deep"
             >
               {t.cta}
             </a>

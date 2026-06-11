@@ -6,6 +6,7 @@ import {
   Noto_Sans_SC,
 } from "next/font/google";
 import { LanguageProvider } from "@/lib/i18n";
+import SmoothScroll from "@/components/SmoothScroll";
 import "./globals.css";
 
 const cormorant = Cormorant_Garamond({
@@ -49,7 +50,7 @@ export const metadata: Metadata = {
     description:
       "Precision cuts, dimensional color and silk-finish treatments in a marble-and-gold studio. Open every day, 10:30–7.",
     type: "website",
-    images: ["/images/salon-mirrors.jpg"],
+    images: ["/og.jpg"],
   },
 };
 
@@ -97,6 +98,7 @@ export default function RootLayout({
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(businessSchema) }}
         />
+        <SmoothScroll />
         <LanguageProvider>{children}</LanguageProvider>
       </body>
     </html>

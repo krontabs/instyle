@@ -1,0 +1,12 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "instyle-dev",
+      "runtimeExecutable": "npm",
+      "runtimeArgs": ["run", "dev"],
+      "cwd": "C:/Users/stanl/OneDrive/Desktop/InStyle/instyle-salon",
+      "port": 3000
+    }
+  ]
+}

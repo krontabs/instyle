@@ -1,36 +1,34 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# InStyle Hair Salon
 
-## Getting Started
+One-page website for InStyle Hair Salon — 18558 Gale Ave #180, City of Industry, CA 91748 (Seasons Place). Open every day, 10:30 AM – 7:00 PM.
 
-First, run the development server:
+**Live:** https://instyle-salon.vercel.app
+
+## Stack
+
+- Next.js 16 (App Router) + TypeScript + Tailwind CSS v4
+- GSAP (ScrollTrigger, SplitText) via `@gsap/react` — animations gated behind `prefers-reduced-motion`
+- Resend for booking email alerts (`app/api/book/route.ts`)
+- Deployed on Vercel; pushes to `main` auto-deploy
+
+## Booking flow
+
+The form at `#book` POSTs to `/api/book`, which validates input (honeypot spam check, length limits, HTML escaping) and emails the owner via Resend.
+
+Environment variables (set in Vercel → Settings → Environment Variables, or `.env.local` for dev):
+
+| Variable | Purpose |
+| --- | --- |
+| `RESEND_API_KEY` | Resend API key |
+| `BOOKING_EMAIL` | Recipient for booking alerts (free Resend tier: must be the Resend account owner's email until a domain is verified) |
+| `NEXT_PUBLIC_SITE_URL` | Canonical URL for Open Graph metadata |
+
+## Development
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev    # http://localhost:3000
+npm run build  # production build
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
-
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
-
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+Content lives in `lib/site.ts` (address, hours, services, booking options) and the section components in `components/sections/`.

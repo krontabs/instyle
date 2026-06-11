@@ -62,15 +62,15 @@ export default function Hero() {
         aria-hidden
       />
       <div
-        className="absolute inset-0 bg-gradient-to-r from-ivory via-ivory/80 to-ivory/20"
+        className="absolute inset-0 bg-gradient-to-r from-ivory/85 via-ivory/55 to-ivory/10"
         aria-hidden
       />
       <div
-        className="absolute inset-x-0 top-0 h-36 bg-gradient-to-b from-ivory/85 to-transparent"
+        className="absolute inset-x-0 top-0 h-36 bg-gradient-to-b from-ivory/60 to-transparent"
         aria-hidden
       />
       <div
-        className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-ivory/80 to-transparent"
+        className="absolute inset-x-0 bottom-0 h-24 bg-gradient-to-t from-ivory/55 to-transparent"
         aria-hidden
       />
 

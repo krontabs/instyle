@@ -38,10 +38,14 @@ export const bookingServices = [
 ];
 
 export const bookingTimes = [
-  "Morning (10:30–12)",
-  "Early afternoon (12–3)",
-  "Late afternoon (3–5)",
-  "Evening (5–7)",
+  "10:30 – 11:30 AM",
+  "11:30 AM – 12:30 PM",
+  "12:30 – 1:30 PM",
+  "1:30 – 2:30 PM",
+  "2:30 – 3:30 PM",
+  "3:30 – 4:30 PM",
+  "4:30 – 5:30 PM",
+  "5:30 – 6:30 PM",
 ];
 
 export const stylists = ["No preference", "Jade", "John", "Ryan", "Anckley"];

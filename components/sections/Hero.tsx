@@ -29,7 +29,12 @@ export default function Hero() {
           mask: "lines",
         });
 
-        const tl = gsap.timeline({ defaults: { ease: EASE } });
+        // Line masks clip descenders (g, y); restore the intact heading
+        // once the entrance has played.
+        const tl = gsap.timeline({
+          defaults: { ease: EASE },
+          onComplete: () => split.revert(),
+        });
         tl.from(split.lines, {
           yPercent: 110,
           duration: 0.9,

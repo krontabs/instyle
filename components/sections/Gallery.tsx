@@ -2,7 +2,7 @@
 
 import { useRef } from "react";
 import Image from "next/image";
-import { useGSAP, sectionReveal } from "@/lib/gsap";
+import { gsap, useGSAP, sectionReveal } from "@/lib/gsap";
 import { useLang } from "@/lib/i18n";
 import { translations } from "@/lib/translations";
 
@@ -71,12 +71,76 @@ const workPhotos = [
 function Strip({
   photos,
   label,
-  regionLabel,
+  reverse = false,
 }: {
   photos: { src: string; alt: string }[];
   label: string;
-  regionLabel: string;
+  reverse?: boolean;
 }) {
+  const containerRef = useRef<HTMLDivElement>(null);
+  const trackRef = useRef<HTMLDivElement>(null);
+
+  // A single sequence must be wider than any viewport for a seamless
+  // loop; short lists are doubled before duplication.
+  const seq = photos.length < 6 ? [...photos, ...photos] : photos;
+
+  useGSAP(
+    () => {
+      const mm = gsap.matchMedia();
+
+      mm.add("(prefers-reduced-motion: no-preference)", () => {
+        const container = containerRef.current;
+        const track = trackRef.current;
+        if (!container || !track) return;
+
+        container.style.overflowX = "hidden";
+        const tween = gsap.fromTo(
+          track,
+          { xPercent: reverse ? -50 : 0 },
+          {
+            xPercent: reverse ? 0 : -50,
+            ease: "none",
+            duration: seq.length * 7,
+            repeat: -1,
+          }
+        );
+
+        const pause = () => tween.pause();
+        const resume = () => tween.resume();
+        container.addEventListener("mouseenter", pause);
+        container.addEventListener("mouseleave", resume);
+        return () => {
+          container.removeEventListener("mouseenter", pause);
+          container.removeEventListener("mouseleave", resume);
+          tween.kill();
+        };
+      });
+    },
+    { scope: containerRef }
+  );
+
+  const renderSeq = (ariaHidden: boolean) => (
+    <div
+      className="flex shrink-0 gap-6 pr-6"
+      aria-hidden={ariaHidden || undefined}
+    >
+      {seq.map((p, i) => (
+        <figure
+          key={`${p.src}-${i}`}
+          className={`relative h-[320px] w-[240px] shrink-0 md:h-[400px] md:w-[300px] ${i % 2 === 1 ? "mt-6" : ""} overflow-hidden ${i % 2 === 0 ? "arch border-2 border-gold" : ""}`}
+        >
+          <Image
+            src={p.src}
+            alt={ariaHidden ? "" : p.alt}
+            fill
+            sizes="(max-width: 768px) 240px, 300px"
+            className="object-cover"
+          />
+        </figure>
+      ))}
+    </div>
+  );
+
   return (
     <div className="mt-10">
       <p className="anim mx-auto mb-5 flex max-w-6xl items-center gap-4 px-5 md:px-8">
@@ -86,25 +150,14 @@ function Strip({
         <span className="h-px flex-1 bg-gold/40" aria-hidden />
       </p>
       <div
-        className="anim flex gap-6 overflow-x-auto px-5 pb-6 md:px-[max(2rem,calc((100vw-72rem)/2+2rem))]"
-        role="region"
-        aria-label={regionLabel}
-        tabIndex={0}
+        ref={containerRef}
+        className="anim overflow-x-auto pb-6"
+        aria-label={label}
       >
-        {photos.map((p, i) => (
-          <figure
-            key={p.src}
-            className={`relative h-[320px] w-[240px] shrink-0 md:h-[400px] md:w-[300px] ${i % 2 === 1 ? "mt-6" : ""} overflow-hidden ${i % 2 === 0 ? "arch border-2 border-gold" : ""}`}
-          >
-            <Image
-              src={p.src}
-              alt={p.alt}
-              fill
-              sizes="(max-width: 768px) 240px, 300px"
-              className="object-cover transition-transform duration-500 hover:scale-105"
-            />
-          </figure>
-        ))}
+        <div ref={trackRef} className="flex w-max">
+          {renderSeq(false)}
+          {renderSeq(true)}
+        </div>
       </div>
     </div>
   );
@@ -139,16 +192,8 @@ export default function Gallery() {
         </div>
       </div>
 
-      <Strip
-        photos={workPhotos}
-        label={t.workLabel}
-        regionLabel={`${t.workLabel} — ${t.eyebrow}`}
-      />
-      <Strip
-        photos={spacePhotos}
-        label={t.spaceLabel}
-        regionLabel={`${t.spaceLabel} — ${t.eyebrow}`}
-      />
+      <Strip photos={workPhotos} label={t.workLabel} />
+      <Strip photos={spacePhotos} label={t.spaceLabel} reverse />
     </section>
   );
 }
